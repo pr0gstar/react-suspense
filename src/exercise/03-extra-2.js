@@ -23,7 +23,11 @@ function PokemonInfo({pokemonResource}) {
   )
 }
 
-const SUSPENSE_CONFIG = {timeoutMs: 4000}
+const SUSPENSE_CONFIG = {
+  timeoutMs: 4000,
+  busyDelayMs: 300,
+  busyMinDurationMs: 700,
+}
 
 function createPokemonResource(pokemonName) {
   let delay = 1500
@@ -36,7 +40,7 @@ function createPokemonResource(pokemonName) {
 
   // shows busy indicator for a split second
   // 💯 this is what the extra credit improves
-  // delay = 200
+  delay = 200
   return createResource(fetchPokemon(pokemonName, delay))
 }
 
@@ -68,7 +72,7 @@ function App() {
     <div className="pokemon-info-app">
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
-      <div style={{opacity: isPending ? 0.6 : 1}} className="pokemon-info">
+      <div className={`pokemon-info ${isPending ? 'pokemon-loading' : ''}`}>
         {pokemonResource ? (
           <PokemonErrorBoundary
             onReset={handleReset}
